@@ -112,11 +112,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     list.className = "user-list";
 
     for (const user of notFollowing) {
-      const row = document.createElement("a");
+      const row = document.createElement("div");
       row.className = "user-row";
-      row.href = `https://x.com/${user.username}`;
-      row.target = "_blank";
-      row.rel = "noopener";
+      row.dataset.url = `https://x.com/${user.username}`;
       row.innerHTML = `
         <div class="user-info">
           <span class="name">${escapeHtml(user.name)}</span>
@@ -126,6 +124,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
         </svg>
       `;
+      row.addEventListener("click", (e) => {
+        e.preventDefault();
+        chrome.tabs.create({ url: row.dataset.url, active: false });
+      });
       list.appendChild(row);
     }
 
